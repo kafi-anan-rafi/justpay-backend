@@ -12,14 +12,14 @@ export class UsersService {
             role : CONSTANTS.ROLES.MERCHANT
         },
         {
-            username : "user2",
-            password : "admin",
+            username : "agent",
+            password : "agent",
             email : "@gmail.com",
             role : CONSTANTS.ROLES.CLIENT
         },
         {
-            username : "user3",
-            password : "admin",
+            username : "client",
+            password : "client",
             email : "@gmail.com",
             role : CONSTANTS.ROLES.AGENT
         },
