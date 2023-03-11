@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { TransectionForm } from '../services/dto/transectionform.dto';
-import { TransectionService } from '../services/transection/transection.service';
+import { TransectionForm } from 'src/admin/services/dto/transectionform.dto';
+import { TransectionService } from 'src/admin/services/transection/transection.service';
 
 
 @Controller('transection')

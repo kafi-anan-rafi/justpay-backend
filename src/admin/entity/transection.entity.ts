@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { UserEntity } from "./user.entity";
+
 
 @Entity("transection")
 export class TransectionEntity{
@@ -13,4 +15,7 @@ export class TransectionEntity{
 
     @Column({ type: 'decimal', precision: 10, scale: 2 })
     amount: number;
+
+    @ManyToOne(() => UserEntity, (client) => client.transections)
+    client: UserEntity
 }

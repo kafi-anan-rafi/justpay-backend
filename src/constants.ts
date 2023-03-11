@@ -1,7 +1,7 @@
 export const CONSTANTS = {
-    ROLES : {
-        CLIENT : "client",
-        MERCHANT : "merchant",
-        AGENT : "agent"
-    }
-}
+    ROLES: {
+      MERCHANT: () => 'merchant',
+      AGENT: () => 'agent',
+    },
+  };
+  
