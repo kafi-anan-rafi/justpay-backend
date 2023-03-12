@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
-import passport from 'passport';
 
 
 async function bootstrap() {
@@ -11,9 +10,10 @@ async function bootstrap() {
       secret: 'my-secret',
       resave: true,
       saveUninitialized: false,
+      name: 'myCookie',
       cookie: {
-        maxAge: 30000
-      }
+        maxAge: 30000,
+      },
     }),
   );
     

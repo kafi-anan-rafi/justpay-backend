@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TransectionController } from './controllers/transection/transection.controller';
 import { TransectionEntity } from './entity/transection.entity';
@@ -16,18 +16,15 @@ import { CurrencyController } from './controllers/currency/currency.controller';
 import { CurrencyService } from './services/currency/currency.service';
 import { CurrencyEntity } from './entity/currency.entity';
 import { ExchangeEntity } from './entity/exchange.entity';
-import { AuthModule } from 'src/auth/auth.module';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { JwtService } from '@nestjs/jwt';
 
 
-
-
 @Module({
-    imports:[AuthModule, TypeOrmModule.forFeature([UserEntity, TransectionEntity, CurrencyEntity, ExchangeEntity])],
+    imports:[ TypeOrmModule.forFeature([UserEntity, TransectionEntity, CurrencyEntity, ExchangeEntity])],
     controllers:[ TransectionController, RoleController, RoleAssignController, AuthController, CurrencyController],
     providers:[UsersService,TransectionService, CruduserService, RoleAssignService,AuthService, JwtService,RolesGuard,CurrencyService,JwtStrategy],
     exports:[UsersService, TransectionService,RolesGuard]
-    
 })
 export class AdminModule {}
+

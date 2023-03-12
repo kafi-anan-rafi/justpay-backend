@@ -5,10 +5,10 @@ import { RoleAssignService } from '../services/role-assign/role-assign.service';
 export class RoleAssignController {
     constructor(private readonly roleAssignService: RoleAssignService,) {}
 
-    @Post(':id/create')
+    @Post(':id/view')
     async createrole(@Param('id') id: number) {
     await this.roleAssignService.createRole(id);
-    return'Role assigned sucessfuly!';
+    return'View role assigned sucessfuly!';
   }
 
   @Put(':id/update')

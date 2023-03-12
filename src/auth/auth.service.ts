@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException, Session, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/admin/entity/user.entity';
 import { LoginForm } from 'src/admin/services/dto/login.dto';
@@ -26,15 +25,13 @@ export class AuthService {
 
   async login(loginDto: LoginForm) {
     const user = await this.validateUser(loginDto.username, loginDto.password);
-    
-
   }
 
   insertUser(mydto:UserForm) {
     const useraccount = new UserEntity();
     useraccount.createStatus = false;
     useraccount.updateStatus = false;
-    useraccount.deleteStatus = false;        
+    useraccount.deleteStatus = false;
     return this.userRepo.save(mydto);
  }
 
@@ -68,12 +65,6 @@ export class AuthService {
      throw new NotFoundException(`User with id ${id} not found.`);
    }
    return useraccount;
-}
-
-  async logout(@Session() session) {
-    {
-      session.destroy();
-  }
 }
 }
 

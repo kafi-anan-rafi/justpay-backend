@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule, JwtService} from '@nestjs/jwt';
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from 'src/admin/controllers/auth/auth.controller';
 import { UserEntity } from 'src/admin/entity/user.entity';
 import { CruduserService } from 'src/admin/services/cruduser/cruduser.service';
+import { RoleAssignService } from 'src/admin/services/role-assign/role-assign.service';
 import { AuthService } from './auth.service';
 import { DeactivateAuthGuard } from './deactivate.guard';
 import { JwtStrategy } from './jwt.strategy';
@@ -12,7 +14,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { LocalStrategy } from './local.strategy';
 
 @Module({
-  imports: [
+  imports:[
     JwtModule.register({
       secretOrPrivateKey: 'your-secret-key',
       signOptions: { expiresIn: '60s' },
@@ -21,6 +23,11 @@ import { LocalStrategy } from './local.strategy';
     PassportModule.register({ defaultStrategy: 'local', session: true }),
   ],
   controllers: [AuthController],
-  providers: [LocalStrategy, AuthService, LocalAuthGuard, JwtService,JwtStrategy,CruduserService,DeactivateAuthGuard]
+  providers: [LocalStrategy, AuthService, JwtService,JwtStrategy,CruduserService, RoleAssignService]
+    /*{
+      provide: APP_GUARD,
+      useClass: LocalAuthGuard,
+    },*/
 })
 export class AuthModule {}
+

@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsInt, IsString,IsDate, Length, IsBoolean } from "class-validator";
 
+
 export class UserForm{
 
     @IsString()
@@ -10,7 +11,7 @@ export class UserForm{
     phone:string;
 
     @IsDate()
-    dob: string;
+    dob: Date;
 
     @IsString()
     uname : string;
@@ -28,4 +29,6 @@ export class UserForm{
 
     @IsBoolean()
     deleteStatus: boolean;
+
+    filename:string;
 }

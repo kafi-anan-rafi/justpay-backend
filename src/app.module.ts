@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminModule } from './admin/admin.module';
@@ -10,10 +10,11 @@ import { UserEntity } from './admin/entity/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
-  imports: [
+  imports: [ AdminModule, AuthModule,
     SessionModule.forRoot({ session: { secret: 'my-secret' } }),
     PassportModule.register({}),
     AdminModule,
@@ -35,6 +36,4 @@ import { JwtStrategy } from './auth/jwt.strategy';
   controllers: [AppController],
   providers: [AppService, AuthService,JwtService,JwtStrategy],
 })
-export class AppModule {
-  
-}
+export class AppModule {}

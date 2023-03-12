@@ -10,7 +10,7 @@ export class UserEntity{
     name: string;
 
     @Column({ nullable: true })
-    dob: string;
+    dob: Date;
 
     @Column()
     uname: string;
@@ -32,6 +32,9 @@ export class UserEntity{
 
    @Column({ default: false })
    deleteStatus: boolean;
+
+   @Column({ nullable: true })
+   filename: string;
 
    @OneToMany(() => TransectionEntity, (transection) => transection.client)
     transections: TransectionEntity[]
