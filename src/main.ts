@@ -12,7 +12,7 @@ async function bootstrap() {
       saveUninitialized: false,
       name: 'myCookie',
       cookie: {
-        maxAge: 30000,
+        maxAge: 300000,
       },
     }),
   );

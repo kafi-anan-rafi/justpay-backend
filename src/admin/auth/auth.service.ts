@@ -1,9 +1,10 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, NotFoundException, Session, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/admin/entity/user.entity';
-import { LoginForm } from 'src/admin/services/dto/login.dto';
-import { UserForm } from 'src/admin/services/dto/userform.dto';
 import { Repository } from 'typeorm';
+import { UserEntity } from '../entity/user.entity';
+import { LoginForm } from '../services/dto/login.dto';
+import { UserForm } from '../services/dto/userform.dto';
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AuthService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
+    private mailerService: MailerService
   ) {}
 
   async validateUser(username: string, password: string): Promise<UserEntity> {
@@ -65,6 +67,14 @@ export class AuthService {
      throw new NotFoundException(`User with id ${id} not found.`);
    }
    return useraccount;
+}
+
+async sendEmail(emaildata) {
+  return   await this.mailerService.sendMail({
+    to: emaildata.email,
+    subject: emaildata.subject,
+    text: emaildata.text, 
+  });
 }
 }
 

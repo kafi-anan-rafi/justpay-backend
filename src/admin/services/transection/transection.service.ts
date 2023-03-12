@@ -27,13 +27,12 @@ export class TransectionService {
     }
                                 
     
-    fromUser.balance -= transferdto.amount; 
-    toUser.balance = this.add( transferdto.amount,toUser.balance)  ; 
+    fromUser.balance = this.sub( transferdto.amount,toUser.balance); 
+    toUser.balance = this.add( transferdto.amount,toUser.balance); 
    
     console.log(fromUser.balance);
     console.log(toUser.balance);
     await this.clientRepo.save(fromUser);    
-   // await new Promise((resolve) => setTimeout(resolve, 2000));
     await this.clientRepo.save(toUser);
                                
      const transferacount = new TransectionEntity()
@@ -46,6 +45,11 @@ export class TransectionService {
     add(a:number, b:number):number
     {
       return a+b;
+    }
+
+    sub(a:number, b:number):number
+    {
+      return a-b;
     }
 }
    
