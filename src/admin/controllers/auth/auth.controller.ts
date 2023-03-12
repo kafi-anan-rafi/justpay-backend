@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, FileTypeValidator, Get, InternalServerErrorException, MaxFileSizeValidator, Param, 
-ParseFilePipe, Post, Put, Req, Res, Session, UnauthorizedException, UploadedFile, UseGuards,
+ParseFilePipe, Patch, Post, Put, Req, Res, Session, UnauthorizedException, UploadedFile, UseGuards,
 UseInterceptors, 
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -13,6 +13,10 @@ import { Repository } from 'typeorm';
 import { diskStorage } from 'multer';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { RoleAssignService } from 'src/admin/services/role-assign/role-assign.service';
+import { CurrencyService } from 'src/admin/services/currency/currency.service';
+import { CurrencyDTO } from 'src/admin/services/dto/currency.dto';
+import { CurrencyEntity } from 'src/admin/entity/currency.entity';
+import { ExchangeDTO } from 'src/admin/services/dto/exchange.dto';
 
 
 @Controller('auth')
@@ -21,11 +25,12 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly cruduserService: CruduserService,
     private readonly roleAssignService: RoleAssignService,
+    private currencyService: CurrencyService,    
     @InjectRepository(UserEntity)
         private userRepo: Repository<UserEntity>) {}
 
-        
-@Post('signup')
+//CRUD         
+@Post(':id/signup')
 @UseInterceptors(FileInterceptor('myfile',
         {storage:diskStorage({
           destination: './uploads',
@@ -35,7 +40,7 @@ export class AuthController {
         })
         
         }))
-  async signup(@Session() session, @Body() mydto: UserForm,@UploadedFile( new ParseFilePipe({
+  async signup(@Session() session, @Param('id') id: number, @Body() mydto: UserForm,@UploadedFile( new ParseFilePipe({
     validators: [
       new MaxFileSizeValidator({ maxSize: 16000000 }),
       new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
@@ -45,9 +50,15 @@ export class AuthController {
   file: Express.Multer.File) {
     mydto.filename = file.filename;
     const username = session.username;
-      if(username == 'ricky'){
-    return await this.cruduserService.insertUser(mydto);}
-    else { throw new UnauthorizedException('invalid actions');}
+    const useraccount = await this.userRepo.findOneBy({id});
+    if(username != null){
+      if (useraccount.createStatus == false) {
+        throw new UnauthorizedException(`User with id ${id} not allowed to perform create operation.`);
+      }
+      else{
+            return await this.cruduserService.insertUser(mydto);}}
+      else {  
+            throw new UnauthorizedException('You need to login first');}
   }
 
   @UseGuards(LocalAuthGuard)
@@ -83,7 +94,7 @@ export class AuthController {
     const username = session.username;
     const useraccount = await this.userRepo.findOneBy({id});
     if(username != null){
-      if (useraccount.updateStatus == false) {
+      if (useraccount.deleteStatus == false) {
         throw new UnauthorizedException(`User with id ${id} not allowed to perform create operation.`);
       }
       else{
@@ -118,27 +129,34 @@ export class AuthController {
     }
 }
 
+
 //Role assign
 
 @Post(':id/view')
     async createrole(@Session() session, @Param('id') id: number) {
       const username = session.username;
-      if(username == 'rayan'){
+      if(username == 'ricky'){
     await this.roleAssignService.createRole(id);
     return'View role assigned sucessfuly!';}
     else{throw new UnauthorizedException('invalid actions');}
   }
 
   @Put(':id/update')
-    async updaterole(@Param('id') id: number) {
+    async updaterole(@Session() session, @Param('id') id: number) {
+      const username = session.username;
+      if(username == 'ricky'){
     await this.roleAssignService.updateRole(id);
     return'Role assigned sucessfuly!';
   }
+}
 
   @Put(':id/delete')
-    async deleterole(@Param('id') id: number) {
+    async deleterole(@Session() session, @Param('id') id: number) {
+      const username = session.username;
+      if(username == 'ricky'){
     await this.roleAssignService.deleteRole(id);
     return'Role assigned sucessfuly!';
   }
+}
 }
 

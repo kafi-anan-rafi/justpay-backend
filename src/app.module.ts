@@ -10,11 +10,10 @@ import { UserEntity } from './admin/entity/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
 import { JwtStrategy } from './auth/jwt.strategy';
-import { AuthModule } from './auth/auth.module';
 
 
 @Module({
-  imports: [ AdminModule, AuthModule,
+  imports: [ AdminModule,
     SessionModule.forRoot({ session: { secret: 'my-secret' } }),
     PassportModule.register({}),
     AdminModule,
