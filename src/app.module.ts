@@ -44,7 +44,7 @@ import { JwtStrategy } from './admin/auth/jwt.strategy';
     //   host: 'localhost',
     //   port: 5432,
     //   username: 'postgres',
-    //   password: '123456789',
+    //   password: 'root',
     //   database: 'JustPay',
     //   autoLoadEntities: true,
     //   synchronize: true,

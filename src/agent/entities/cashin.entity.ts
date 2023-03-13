@@ -6,10 +6,10 @@ export class CashInEntity {
   id: number;
 
   @Column()
-  agent_phone: string;
+  agent_email: string;
 
   @Column()
-  user_phone: string;
+  user_email: string;
 
   @Column()
   amount: number;

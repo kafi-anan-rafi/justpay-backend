@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from "@nestjs-modules/mailer/dist";
+import { EmailDto } from '../dto/email.dto';
 
 @Injectable()
 export class AgentService {
@@ -23,7 +24,10 @@ export class AgentService {
     return agnt;
   }
 
-  updateProfile(id: number, updateAgentDto: UpdateAgentDto) {
+  async updateProfile(id: number, updateAgentDto: UpdateAgentDto) {
+    const salt = await bcrypt.genSalt();
+    const hassed = await bcrypt.hash(updateAgentDto.password, salt);
+    updateAgentDto.password = hassed;
     return this.agentRepository.update(id, updateAgentDto)
   }
 
@@ -45,12 +49,12 @@ export class AgentService {
     return this.agentRepository.save(info);
   }
 
-  // async sendEmail(mydata) {
-  //   return await this.mailerService.sendMail({
-  //     to: mydata.email,
-  //     subject: mydata.subject,
-  //     text: mydata.text,
-  //   });
-  // }
+  async sendEmail(mydata: EmailDto) {
+    return await this.mailerService.sendMail({
+      to: mydata.email,
+      subject: mydata.subject,
+      text: mydata.text,
+    });
+  }
 
 }

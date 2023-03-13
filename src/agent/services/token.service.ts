@@ -13,10 +13,10 @@ export class TokenService {
   ) { }
 
   getAllToken(agent_id: any) {
-    return this.tokenRepository.createQueryBuilder("token")
-      .where("token.agent_id = :id", { id: agent_id })
-      .getMany()
-    // return this.tokenRepository.find()
+    // return this.tokenRepository.createQueryBuilder("token")
+    //   .where("token.agent_id = :id", { id: agent_id })
+    //   .getMany()
+    return this.tokenRepository.find()
   }
 
   addToken(addTokenDto) {

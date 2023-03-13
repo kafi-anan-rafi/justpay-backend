@@ -1,7 +1,7 @@
 import { IsNumber, IsDate, IsOptional } from "class-validator";
 
 export class AddBalanceDto {
-  @IsOptional()
+  // @IsOptional()
   @IsNumber()
   agent_id: number;
 
@@ -10,9 +10,9 @@ export class AddBalanceDto {
 
   @IsOptional()
   @IsDate()
-  created_at: Date;
+  created_at: string;
 
   @IsOptional()
   @IsDate()
-  updated_at: Date;
+  updated_at: string;
 }

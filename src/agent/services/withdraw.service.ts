@@ -11,12 +11,12 @@ export class WithdrawService {
     private withdrawRepository: Repository<WithdrawEntity>,
   ) { }
 
-  withdraw(balance: number, amount: number) {
+  withdraw(balance: number, dto,  amount: number) {
     if (balance < amount)
       return "Insufficient balance!"
     else {
-      // const amnt = this.withdrawRepository.create(amount);
-      // return this.withdrawRepository.save(amnt)
+      const amnt = this.withdrawRepository.create(dto);
+      return this.withdrawRepository.save(amnt)
     }
   }
 }

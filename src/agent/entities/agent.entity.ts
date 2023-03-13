@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TokenEntity } from "./token.entity";
 
 @Entity("agent_info")
 export class AgentEntity {
@@ -22,4 +23,7 @@ export class AgentEntity {
 
   @Column()
   phone: string;
+
+  @OneToMany(() => TokenEntity, (token) => token.id)
+  tokens: TokenEntity[]
 }

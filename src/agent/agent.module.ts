@@ -18,9 +18,21 @@ import { BonusService } from './services/bonus.service';
 import { BonusEntity } from './entities/bonus.entity';
 import { BalanceService } from './services/balance.service';
 import { BalanceEntity } from './entities/balance.entity';
+import { MailerModule } from "@nestjs-modules/mailer";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AgentEntity, BonusEntity, ReferEntity, CashInEntity, CashOutEntity, TokenEntity, WithdrawEntity, BalanceEntity])],
+  imports: [MailerModule.forRoot({
+    transport: {
+      host: 'smtp.gmail.com',
+      port: 465,
+      ignoreTLS: true,
+      secure: true,
+      auth: {
+        user: '',
+        pass: ''
+      },
+    }
+  }), TypeOrmModule.forFeature([AgentEntity, BonusEntity, ReferEntity, CashInEntity, CashOutEntity, TokenEntity, WithdrawEntity, BalanceEntity])],
   controllers: [AgentController],
   providers: [AgentService, CashInService, CashOutService, OfferService, ReferService, TokenService, WithdrawService, BonusService, BalanceService],
 })

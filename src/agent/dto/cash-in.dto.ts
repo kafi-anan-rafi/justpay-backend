@@ -1,21 +1,21 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsString, IsEmail, IsOptional } from "class-validator";
 
 export class CashInDto {
-  @IsNumber()
-  id: number;
 
-  @IsString()
-  agent_phone: string;
+  @IsEmail()
+  agent_email: string;
 
-  @IsString()
-  user_phone: string;
+  @IsEmail()
+  user_email: string;
 
   @IsString()
   amount: number;
 
+  @IsOptional()
   @IsString()
   cashin_time: string;
 
+  @IsOptional()
   @IsString()
   transaction_id: string;
 }

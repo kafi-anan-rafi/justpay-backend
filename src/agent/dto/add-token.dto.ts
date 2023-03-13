@@ -4,9 +4,6 @@ export class AddTokenDto {
   @IsNumber()
   agent_id: number;
 
-  // @IsEmail()
-  // agent_email: string;
-
   @IsString()
   message: string;
 

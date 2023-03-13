@@ -11,24 +11,24 @@ import { signinDto } from './dto/signin.dto';
 
 @Controller('merchant/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('signup')
   @UsePipes(ValidationPipe)
-  @UseInterceptors(FileInterceptor('profile_image',{
-    storage:diskStorage({
+  @UseInterceptors(FileInterceptor('profile_image', {
+    storage: diskStorage({
       destination: './uploads',
-      filename: function(req, file, cb){
-        cb(null,Date.now()+file.originalname)
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + file.originalname)
       }
     })
-  }))  
-  async create(@Body() merchantInfo:CreateAuthDto, @UploadedFile( new ParseFilePipe({
-    validators:[
-      new MaxFileSizeValidator({maxSize:1000000000}),
-      new FileTypeValidator({fileType:'image'}),
+  }))
+  async create(@Body() merchantInfo: CreateAuthDto, @UploadedFile(new ParseFilePipe({
+    validators: [
+      new MaxFileSizeValidator({ maxSize: 1000000000 }),
+      new FileTypeValidator({ fileType: 'image' }),
     ],
-  }),)file: Express.Multer.File) {
+  }),) file: Express.Multer.File) {
     merchantInfo.profile_image = file.filename;
     //console.log(merchantInfo);
     return await this.authService.signup(merchantInfo).catch((e) => {
@@ -43,41 +43,38 @@ export class AuthController {
           'Account with this phone already exists.',
         );
       }
-
       return e;
     });
   }
 
   @Post('signin')
   @UsePipes(ValidationPipe)
-  async signin(@Session() session, @Body() merchantInfo:signinDto) {
+  async signin(@Session() session, @Body() merchantInfo: signinDto) {
     //console.log(merchantInfo);
-    if(session.email){
-      return {message: 'Already logedin!'};
+    if (session.email) {
+      return { message: 'Already logedin!' };
     }
-    else{
-      const logged =await this.authService.signin(merchantInfo);
-      if(logged.status){        
+    else {
+      const logged = await this.authService.signin(merchantInfo);
+      if (logged.status) {
         session.email = await merchantInfo.email;
         session.user_id = logged.id;
         //console.log(session.user_id);
-        return {message: 'success'};
+        return { message: 'success' };
       }
-      else{
-        return {message: 'Invalid Email or Password'};
+      else {
+        return { message: 'Invalid Email or Password' };
       }
     }
-    
+
   }
 
   @Get('signout')
   signout(@Session() session) {
-    if(session.destroy())
-    {
-      return {message:"you are logged out"};
+    if (session.destroy()) {
+      return { message: "you are logged out" };
     }
-    else
-    {
+    else {
       throw new UnauthorizedException("invalid actions");
     }
   }

@@ -12,12 +12,18 @@ export class BalanceService {
     private balanceRepository: Repository<BalanceEntity>,
   ) { }
 
-  getBalance(id: number) {
-    return this.balanceRepository.createQueryBuilder("agent")
-      .where("agent.id = :id", { id: id })
+  async getBalance(id: number) {
+    // return await this.balanceRepository.findOneBy({ id })
+    const balanceData = await this.balanceRepository.createQueryBuilder("balance")
+      .where("balance.agent_id = :id", { id: id })
       .getOne()
+    return balanceData.balance;
   }
-  
+
+  // getBalanceByEmail(email: string) {
+  //   return this.balanceRepository.findOneBy({})
+  // }
+
   addBalance(balanceDto: AddBalanceDto) {
     return this.balanceRepository.insert(balanceDto);
   }

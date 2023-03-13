@@ -23,6 +23,7 @@ import { diskStorage } from 'multer';
 import { BalanceService } from './services/balance.service';
 import { UpdateBalanceDto } from './dto/update-balance.dto';
 import { AddBalanceDto } from './dto/add-balance.dto';
+import { EmailDto } from './dto/email.dto';
 
 @Controller('agent')
 export class AgentController {
@@ -81,10 +82,10 @@ export class AgentController {
     }
   }
 
-  // @Post('/sendemail')
-  // sendEmail(@Body() mydata) {
-  // return this.agentService.sendEmail(mydata);
-  // }
+  @Post('sendemail')
+  sendEmail(@Body() mydata: EmailDto) {
+    return this.agentService.sendEmail(mydata);
+  }
 
   @Get('profile/:id')
   viewProfile(@Param('id') id: number) {
@@ -105,6 +106,7 @@ export class AgentController {
 
   @Get('info/cashout/:id')
   totalCashout(@Param('id', ParseIntPipe) id: number, @Query() paginationQuery) {
+
   }
 
   @Get('info/bonus/:id')
@@ -120,25 +122,29 @@ export class AgentController {
   // Cash In, Cash Out & Withdraw
   @Post('cashin/:id')
   cashIn(@Body() amount: CashInDto) {
+    amount.cashin_time = new Date().toLocaleString();
+    amount.transaction_id = '' + Date.now()
     return this.cashInService.cashIn(amount);
   }
 
   @Post('cashout/:id')
   cashOut(@Body() amount: CashOutDto) {
+    amount.cashout_time = new Date().toLocaleString();
+    amount.transaction_id = '' + Date.now();
     return this.cashOutService.cashOut(amount);
   }
 
   @Post('withdraw/:id')
-  async withdraw(@Param() id: number, @Body() amount: number) {
-    const balance = await this.balanceService.getBalance(id);
-    // return this.withdrawService.withdraw(balance, amount);
+  async withdraw(@Param() id: number, @Body() dto: WithdrawDto) {
+    // const { balance } = await this.balanceService.getBalance(id);
+    // return this.withdrawService.withdraw(id, dto, balance);
   }
 
   @Post("balance")
   // @UseGuards(SessionGuard)
   addBalance(@Session() session, balanceDto: AddBalanceDto) {
-    console.log(session);
-    balanceDto.agent_id = session.agentId
+    // balanceDto.agent_email = session.agent_email
+    balanceDto.created_at = '' + new Date().toLocaleDateString();
     return this.balanceService.addBalance(balanceDto);
   }
 
@@ -172,7 +178,6 @@ export class AgentController {
     newAmount.type = 2;
     // newAmount.updatedAt = amount.updatedAt;
     newAmount.amount = amount.amount;
-
     // return this.bonusService.cashOutBonus(newAmount);
   }
 
@@ -197,7 +202,7 @@ export class AgentController {
 
 
   // Help Token
-  @Get('token/:id')
+  @Get('token')
   getAllToken(@Session() session, @Param() id: number) {
     return this.tokenService.getAllToken(id);
   }
@@ -205,12 +210,12 @@ export class AgentController {
   @Post('token')
   async addToken(@Body() token: AddTokenDto) {
     token.created_at = new Date().toLocaleString();
-    const admin = await this.viewProfile(token.agent_id)
-    if (admin) {
-      return this.tokenService.addToken(token);
-    } else {
-      throw new NotFoundException("User not found")
-    }
+    // const admin = await this.viewProfile(token.agent_id)
+    // if (admin) {
+    return this.tokenService.addToken(token);
+    // } else {
+    // throw new NotFoundException("User not found")
+    // }
   }
 
   @Patch('token/:id')

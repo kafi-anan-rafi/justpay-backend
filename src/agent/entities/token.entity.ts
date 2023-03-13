@@ -1,15 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AgentEntity } from "./agent.entity";
 
 @Entity('agent_token')
 export class TokenEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
-
-  @Column()
-  agent_id: number;
-
-  // @Column()
-  // agent_email: string;
 
   @Column()
   message: string;
@@ -22,4 +17,7 @@ export class TokenEntity {
 
   @Column({ nullable: true })
   response: string;
+
+  @ManyToOne(() => AgentEntity, (agent) => agent.tokens)
+  agent: AgentEntity
 }

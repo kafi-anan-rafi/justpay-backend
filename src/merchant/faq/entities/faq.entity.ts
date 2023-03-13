@@ -1,27 +1,19 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Auth } from 'src/merchant/auth/entities/auth.entity';
+import { ManyToOne, BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('merchant_fac')
+@Entity('merchant_faq')
 export class Faq { 
     @PrimaryGeneratedColumn()
     id:number;
+    
+    @ManyToOne(() => Auth, (auth) => auth.Faq)
+    auth: Auth
 
-    // @Column()
-    // name:string;
+    @Column({type: 'text'})
+    question:string;
 
-    // @Column({unique: true})
-    // email:string;
-
-    // @Column({unique: true})
-    // phone:string;
-
-    // @Column()
-    // password:string;
-
-    // @Column()
-    // profile_image:string;
-
-    // @Column({type: 'float', default: 0})
-    // balance:string;
+    @Column({type: 'text'})
+    answer:string;
 
     @CreateDateColumn({type: "timestamp", default:() => "CURRENT_TIMESTAMP(6)"})
     created_at:Date;
